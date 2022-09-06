@@ -2,8 +2,8 @@
 # Найдите произведение элементов на указанных пользователем через пробел позициях.
 
 n = int(input('Введите n: '))
-mylist = [i for i in range(-n, n + 1)]
-# print("Сгенерированный список: ", mylist)
+mylist = [i for i in range(-n, n, 2)]
+print("Сгенерированный список: ", mylist)
 
 print('Введите нужные индексы через пробел: ', end='')
 indexes = [int(i) for i in input().split()]
