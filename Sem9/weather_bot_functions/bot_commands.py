@@ -16,18 +16,24 @@ def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def get_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = update.message.text
-    city = msg.split()[1]  # вычленяет из команды название города
-    r = requests.get('https://sinoptik.ua/погода-' + city)
-    html = BS(r.content, 'html.parser')
+    if ' ' in msg:
+        city = msg.split()[1]  # вычленяет из команды название города
+        try:
+            r = requests.get('https://sinoptik.ua/погода-' + city)
+            html = BS(r.content, 'html.parser')
 
-    s = ''
-    for day in range(3):
-        for el in html.select('#content'):
-            t_min = el.select('.temperature .min')[day].text
-            t_max = el.select('.temperature .max')[day].text
+            s = ''
+            for day in range(3):
+                for el in html.select('#content'):
+                    t_min = el.select('.temperature .min')[day].text
+                    t_max = el.select('.temperature .max')[day].text
 
-            s += ("Сегодня: ", "Завтра: ", "Послезавтра: ")[day]
-            s += str('\t' + t_min + ', ' + t_max + '\n')
+                    s += ("Сегодня: ", "Завтра: ", "Послезавтра: ")[day]
+                    s += str('\t' + t_min + ', ' + t_max + '\n')
 
-    print(s)
-    await update.message.reply_text(s)
+            print(s)
+            await update.message.reply_text(s)
+        except:
+            await update.message.reply_text("Нет такого города. Введите /get Город")
+    else:
+        await update.message.reply_text("Нет такого города. Введите /get Город")
